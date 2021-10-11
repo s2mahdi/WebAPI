@@ -78,7 +78,7 @@ namespace MyApi.Controllers.v1
                     {
                         var verificationCode =await SaveLoginEvent(mobileNumber, cancellationToken);
 
-                        ///send sms
+                        //send sms
                         var sendResult = await smsSender.SendAsync(mobileNumber.ToString(), verificationCode.ToString());
 
                         if (sendResult.IsSuccess)
