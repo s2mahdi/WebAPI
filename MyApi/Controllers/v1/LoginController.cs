@@ -61,7 +61,7 @@ namespace MyApi.Controllers.v1
 
         [HttpGet("GetVerificationCode")]
         [AllowAnonymous]
-        public async Task<int> GetVerificationCode(string mobileNumber, CancellationToken cancellationToken)
+        public async Task<ActionResult> GetVerificationCode(string mobileNumber, CancellationToken cancellationToken)
         {
             var mobilePattern = @"^09[0|1|2|3][0-9]{8}$";
             var match = Regex.Match(mobileNumber, mobilePattern);
@@ -78,16 +78,14 @@ namespace MyApi.Controllers.v1
                     {
                         var verificationCode =await SaveLoginEvent(mobileNumber, cancellationToken);
 
-                        ///send sms --> Uncomment this section, after the SMS service has established and change the return type to 'ActionResult'
-                        //var sendResult = await smsSender.SendAsync(mobileNumber.ToString(), verificationCode.ToString());
+                        ///send sms
+                        var sendResult = await smsSender.SendAsync(mobileNumber.ToString(), verificationCode.ToString());
 
-                        //if (sendResult.IsSuccess)
-                        //{
-                        //    return Ok();
-                        //}
-                        //return BadRequest(sendResult.Error);
-
-                        return verificationCode;
+                        if (sendResult.IsSuccess)
+                        {
+                            return Ok();
+                        }
+                        return BadRequest(sendResult.Error);
                     }
                     else
                     {
