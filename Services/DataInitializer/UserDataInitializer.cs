@@ -35,6 +35,7 @@ namespace Services.DataInitializer
                     UserName = "admin",
                     Email = "admin@site.com",
                     Education="Edu",
+                    Mobile="09368915297",
                     
                     CompanyId=1
                 };

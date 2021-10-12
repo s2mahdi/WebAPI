@@ -38,18 +38,20 @@ namespace Data
         public DbSet<CourseRequestStatus> CourseRequestStatuses { get; set; }
         public DbSet<CourseRequestStatusHistory> CourseRequestStatusHistories { get; set; }
         public DbSet<News> News { get; set; }
-        public DbSet<Post> Posts{ get; set; }
+        public DbSet<Post> Posts { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<DeviceType> DeviceTypes{ get; set; }
-        public DbSet<SamplingOperation> SamplingOperations{ get; set; }
-        public DbSet<SamplingExpert> SamplingExperts{ get; set; }
+        public DbSet<DeviceType> DeviceTypes { get; set; }
+        public DbSet<SamplingOperation> SamplingOperations { get; set; }
+        public DbSet<SamplingExpert> SamplingExperts { get; set; }
         public DbSet<SamplingExpertStatusHistory> SamplingExpertStatusHistories { get; set; }
-        public DbSet<SampleType> SampleTypes{ get; set; }
+        public DbSet<SampleType> SampleTypes { get; set; }
         public DbSet<SmsLoginEvent> SmsLoginEvents { get; set; }
-        public DbSet<Status> Statuses{ get; set; }
-        public DbSet<Ticket> Tickets{ get; set; }
-        public DbSet<Section> Sections{ get; set; }
-        public DbSet<User> Users{ get; set; }
+        public DbSet<Status> Statuses { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Section> Sections { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<CompanyUserMobile> CompanyUserMobiles { get; set; }
+        public DbSet<MobileActivation> MobileActivations { get; set; }
         #endregion
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
