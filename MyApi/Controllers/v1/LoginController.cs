@@ -59,9 +59,9 @@ namespace MyApi.Controllers.v1
 
         #region SMS
 
-        [HttpGet("GetVerificationCode")]
+        [HttpGet("VerifySMS")]
         [AllowAnonymous]
-        public async Task<ActionResult> GetVerificationCode(string mobileNumber, CancellationToken cancellationToken)
+        public async Task<ActionResult> VerifySMS(string mobileNumber, CancellationToken cancellationToken)
         {
             var mobilePattern = @"^09[0|1|2|3][0-9]{8}$";
             var match = Regex.Match(mobileNumber, mobilePattern);
@@ -74,7 +74,7 @@ namespace MyApi.Controllers.v1
                 // Check the mobile number that user send is exist and the expire date is valid
                 if (companyUserMobile != null)
                 {
-                    if (companyUserMobile.ExpireDateAccess < DateTime.Now)
+                    if (companyUserMobile.ExpireDateAccess > DateTime.Now)
                     {
                         var verificationCode =await SaveLoginEvent(mobileNumber, cancellationToken);
 
@@ -89,7 +89,7 @@ namespace MyApi.Controllers.v1
                     }
                     else
                     {
-                        throw new BadRequestException("کد غیر فعال می باشد");
+                        throw new BadRequestException("کاربر غیر فعال می باشد");
                     }
 
                 }
@@ -106,8 +106,8 @@ namespace MyApi.Controllers.v1
         }
 
         [AllowAnonymous]
-        [HttpPut("VerifyUser")]
-        public async Task<ActionResult> VerifyUser([FromBody] VerifySmsLoginDto verifyDto, CancellationToken cancellationToken)
+        [HttpPut("ConfirmUser")]
+        public async Task<ActionResult> ConfirmUser(VerifySmsLoginDto verifyDto, CancellationToken cancellationToken)
         {
  
             var date = DateTime.Now;
