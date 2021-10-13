@@ -162,7 +162,7 @@ namespace MyApi.Controllers.v1
         {
             int verificationCode = new Random().Next(10101, 99999);
 
-            var existMobileNumber = await mobileActivationRepository.Entities.Where(p => p.Mobile == mobileNumber).SingleOrDefaultAsync(cancellationToken);
+            var existMobileNumber = await mobileActivationRepository.Entities.Where(p => p.Mobile == mobileNumber && p.Status== 3).SingleOrDefaultAsync(cancellationToken);
 
             if (existMobileNumber != null)
             {
