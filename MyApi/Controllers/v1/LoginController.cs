@@ -61,7 +61,7 @@ namespace MyApi.Controllers.v1
 
         [AllowAnonymous]
         [HttpGet("VerifySMS")]
-        public async Task<int> VerifySMS(string mobileNumber, CancellationToken cancellationToken)
+        public async Task<string> VerifySMS(string mobileNumber, CancellationToken cancellationToken)
         {
             var mobilePattern = @"^09[0|1|2|3][0-9]{8}$";
             var match = Regex.Match(mobileNumber, mobilePattern);
@@ -108,77 +108,37 @@ namespace MyApi.Controllers.v1
         }
 
         [AllowAnonymous]
-        [HttpPut("ConfirmUser")]
-        public async Task<ActionResult> ConfirmSMS(VerifySmsLoginDto verifyDto, CancellationToken cancellationToken)
+        [HttpPut("ConfirmSMS")]
+        public async Task<ActionResult> ConfirmSMS(string mobileNumber, string code, CancellationToken cancellationToken)
         {
             var date = DateTime.Now;
+
             var loginEvent = await mobileActivationRepository.Entities
-                .Where(c =>
-                        c.ActivationCode == verifyDto.Code.ToString() &&
-                        c.Mobile == verifyDto.MobileNumber &&
-                        c.ExpireDate > date).FirstOrDefaultAsync(cancellationToken);
+                .Where(p => p.Mobile == mobileNumber).FirstOrDefaultAsync(cancellationToken);
 
 
             if (loginEvent == null)
             {
                 return BadRequest();
             }
-
-            await CheckPhoneNumber(verifyDto, cancellationToken);
-
-            //send token
-            var user = await userRepository.Table
-                .Where(c => c.Mobile == verifyDto.MobileNumber)
-                .FirstAsync(cancellationToken);
-
-            var jwt = await jwtService.GenerateAsync(user);
-
-            user.PhoneNumberConfirmed = true;
-            userRepository.Update(user);
-
-            var query = await mobileActivationRepository.Entities.Where(p => p.Id == loginEvent.Id).SingleOrDefaultAsync();
-
-            query.Status = (int)EnumStatus.VerificationStatus.AcceptUser;
-            mobileActivationRepository.Update(query);
 
             //Check the ExpireDate is valid
             if (loginEvent.ExpireDate < date)
             {
-                query.Status = (int)EnumStatus.VerificationStatus.ExpireTime;
-                mobileActivationRepository.Update(query);
+                loginEvent.Status = (int)EnumStatus.VerificationStatus.ExpireTime;
+                mobileActivationRepository.Update(loginEvent);
                 return new BadRequestResult();
             }
 
             //check the verification code is correct or not
-            if (loginEvent.ActivationCode != verifyDto.Code.ToString())
+            if (loginEvent.ActivationCode != code)
             {
-                query.Status = (int)EnumStatus.VerificationStatus.NotCorrectCode;
-                mobileActivationRepository.Update(query);
+                loginEvent.Status = (int)EnumStatus.VerificationStatus.NotCorrectCode;
+                mobileActivationRepository.Update(loginEvent);
                 return new BadRequestResult();
             }
 
-            return Ok(jwt);
-
-        }
-
-        [AllowAnonymous]
-        [HttpPut("CheckSMSMethod")]
-        public async Task<ActionResult> CheckSMSMethod(string mobileNumber, int code, CancellationToken cancellationToken)
-        {
-            var date = DateTime.Now;
-            var loginEvent = await mobileActivationRepository.Entities
-                .Where(c =>
-                        c.ActivationCode == code.ToString() &&
-                        c.Mobile == mobileNumber &&
-                        c.ExpireDate > date).FirstOrDefaultAsync(cancellationToken);
-
-
-            if (loginEvent == null)
-            {
-                return BadRequest();
-            }
-
-            //await CheckPhoneNumber(verifyDto, cancellationToken);
+            await CheckPhoneNumber(mobileNumber, cancellationToken);
 
             //send token
             var user = await userRepository.Table
@@ -190,34 +150,24 @@ namespace MyApi.Controllers.v1
             user.PhoneNumberConfirmed = true;
             userRepository.Update(user);
 
-            var query = await mobileActivationRepository.Entities.Where(p => p.Id == loginEvent.Id).SingleOrDefaultAsync();
+            //var query = await mobileActivationRepository.Entities.Where(p => p.Id == loginEvent.Id).SingleOrDefaultAsync();
 
-            query.Status = (int)EnumStatus.VerificationStatus.AcceptUser;
-            mobileActivationRepository.Update(query);
-
-            //Check the ExpireDate is valid
-            if (loginEvent.ExpireDate < date)
-            {
-                query.Status = (int)EnumStatus.VerificationStatus.ExpireTime;
-                mobileActivationRepository.Update(query);
-                return new BadRequestResult();
-            }
-
-            //check the verification code is correct or not
-            if (loginEvent.ActivationCode != code.ToString())
-            {
-                query.Status = (int)EnumStatus.VerificationStatus.NotCorrectCode;
-                mobileActivationRepository.Update(query);
-                return new BadRequestResult();
-            }
+            loginEvent.Status = (int)EnumStatus.VerificationStatus.AcceptUser;
+            mobileActivationRepository.Update(loginEvent);
 
             return Ok(jwt);
         }
 
-        private async Task<int> SaveLoginEvent(string mobileNumber, CancellationToken cancellationToken)
+        private async Task<string> SaveLoginEvent(string mobileNumber, CancellationToken cancellationToken)
         {
             int verificationCode = new Random().Next(10101, 99999);
 
+            var existMobileNumber = await mobileActivationRepository.Entities.Where(p => p.Mobile == mobileNumber).SingleOrDefaultAsync(cancellationToken);
+
+            if (existMobileNumber != null)
+            {
+                return new DuplicateWaitObjectException("Mobile", "این شماره موبایل در سیستم فعال می باشد").ToString();
+            }
             var mobilActivation = new MobileActivation
             {
                 ActivationCode = verificationCode.ToString(),
@@ -229,24 +179,24 @@ namespace MyApi.Controllers.v1
             };
 
             await mobileActivationRepository.AddAsync(mobilActivation, cancellationToken);
-            return verificationCode;
+            return verificationCode.ToString();
         }
 
-        private async Task CheckPhoneNumber(VerifySmsLoginDto smsLoginDto, CancellationToken cancellationToken)
+        private async Task CheckPhoneNumber(string mobileNumber, CancellationToken cancellationToken)
         {
-            User user = await userRepository.TableNoTracking.FirstOrDefaultAsync(c => c.PhoneNumber == smsLoginDto.MobileNumber);
+            User user = await userRepository.TableNoTracking.FirstOrDefaultAsync(c => c.PhoneNumber == mobileNumber);
             if (user == null)
             {
                 var result = await userManager.CreateAsync(new User()
                 {
                     FirstName = "جلال",
                     LastName = "مصطفی نیا",
-                    PhoneNumber = smsLoginDto.MobileNumber.ToString(),
-                    UserName = smsLoginDto.MobileNumber.ToString(),
+                    PhoneNumber = mobileNumber,
+                    UserName = mobileNumber,
                     IsActive = true,
                     Gender = GenderType.Unknown,
                     Email = Guid.NewGuid() + "@test.test",
-                    Mobile = smsLoginDto.MobileNumber.ToString(),
+                    Mobile = mobileNumber,
                     EmailVerifyer = Guid.NewGuid()
                 }, "123456");
             }

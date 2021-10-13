@@ -8,11 +8,7 @@ namespace Entities
 {
     public class MobileActivation : BaseEntity
     {
-        [Required]
-        [StringLength(11)]
         public string Mobile { get; set; }
-
-        [StringLength(5)]
         public string ActivationCode { get; set; }
         public byte Status { get; set; }
         public DateTime StatusDate { get; set; }
@@ -25,9 +21,9 @@ public class SmsLoginEventConfiguration : IEntityTypeConfiguration<MobileActivat
 {
     public void Configure(EntityTypeBuilder<MobileActivation> builder)
     {
-
-        builder.HasIndex(c => c.Mobile).IsUnique();
-        builder.Property(c => c.Mobile).HasMaxLength(11);
+        builder.HasIndex(c => c.Mobile).IsUnique(true);
+        builder.Property(c => c.Mobile).IsRequired().HasMaxLength(11);
         builder.Property(c => c.ActivationCode).HasMaxLength(5);
+       
     }
 }
