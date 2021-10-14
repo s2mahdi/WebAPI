@@ -21,9 +21,7 @@ public class SmsLoginEventConfiguration : IEntityTypeConfiguration<MobileActivat
 {
     public void Configure(EntityTypeBuilder<MobileActivation> builder)
     {
-        builder.HasIndex(c => c.Mobile).IsUnique(true);
         builder.Property(c => c.Mobile).IsRequired().HasMaxLength(11);
         builder.Property(c => c.ActivationCode).HasMaxLength(5);
-       
     }
 }

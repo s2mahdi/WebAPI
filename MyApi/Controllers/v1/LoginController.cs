@@ -77,7 +77,11 @@ namespace MyApi.Controllers.v1
                     if (companyUserMobile.ExpireDateAccess >= DateTime.Now && companyUserMobile.IsActive != false)
                     {
                         var verificationCode = await SaveLoginEvent(mobileNumber, cancellationToken);
-
+                        var mobileCount = await mobileActivationRepository.Entities.Where(p => p.Mobile == mobileNumber && DateTime.Now < p.ExpireDate).ToListAsync();
+                        if(mobileCount.Count >= 5)
+                        {
+                             throw new BadRequestException("تعداد درخواست بیش از حد مجاز می باشد");
+                        }
                         //send sms --> Uncomment this section, after the SMS service has established and change the return type to 'ActionResult'
                         //var sendResult = await smsSender.SendAsync(mobileNumber.ToString(), verificationCode.ToString());
 
@@ -114,7 +118,7 @@ namespace MyApi.Controllers.v1
             var date = DateTime.Now;
 
             var loginEvent = await mobileActivationRepository.Entities
-                .Where(p => p.Mobile == mobileNumber).FirstOrDefaultAsync(cancellationToken);
+                .Where(p => p.Mobile == mobileNumber && p.ActivationCode == code).FirstOrDefaultAsync(cancellationToken);
 
 
             if (loginEvent == null)

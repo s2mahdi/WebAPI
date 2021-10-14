@@ -22,9 +22,10 @@ public class CompanyConfiguration : IEntityTypeConfiguration<CompanyUserMobile>
 {
     public void Configure(EntityTypeBuilder<CompanyUserMobile> builder)
     {
+        builder.HasIndex(c => c.Mobile).IsUnique(true);
+        builder.Property(p => p.Mobile).IsRequired().HasMaxLength(11);
         builder.Property(p => p.FirstName).HasMaxLength(20);
         builder.Property(p => p.LastName).HasMaxLength(50);
-        builder.Property(p => p.Mobile).HasMaxLength(11);
         builder.Property(p => p.CompanyName).HasMaxLength(50);
         builder.Property(p => p.CompanyCode).HasMaxLength(10);
     }
