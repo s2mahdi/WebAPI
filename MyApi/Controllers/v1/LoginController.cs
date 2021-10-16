@@ -78,7 +78,7 @@ namespace MyApi.Controllers.v1
                     if (companyUserMobile.ExpireDateAccess >= DateTime.Now && companyUserMobile.IsActive != false)
                     {
                         var verificationCode = await SaveLoginEvent(mobileNumber, cancellationToken);
-                        //&& p.CreateDate > DateTime.Now.Minute - siteSettings.SmsSetting.Minute
+                        var timeVAlid = DateTime.Now.Minute - siteSettings.SmsSetting.Minute;
                         var mobileCount = await mobileActivationRepository.Entities.Where(p => p.Mobile == mobileNumber).ToListAsync();
                         if (mobileCount.Count >= 5)
                         {
@@ -120,7 +120,7 @@ namespace MyApi.Controllers.v1
             var date = DateTime.Now;
 
             var loginEvent = await mobileActivationRepository.Entities
-                .Where(p=>p.Mobile == mobileNumber && p.ActivationCode == code).FirstOrDefaultAsync(cancellationToken);
+                .Where(p => p.Mobile == mobileNumber && p.ActivationCode == code).FirstOrDefaultAsync(cancellationToken);
 
 
             if (loginEvent == null)
@@ -139,7 +139,6 @@ namespace MyApi.Controllers.v1
                 return new BadRequestResult();
             }
 
-           
 
             await CheckPhoneNumber(mobileNumber, cancellationToken);
 
@@ -152,8 +151,6 @@ namespace MyApi.Controllers.v1
 
             user.PhoneNumberConfirmed = true;
             userRepository.Update(user);
-
-            //var query = await mobileActivationRepository.Entities.Where(p => p.Id == loginEvent.Id).SingleOrDefaultAsync();
 
             loginEvent.Status = (int)EnumStatus.VerificationStatus.AcceptUser;
             mobileActivationRepository.Update(loginEvent);
