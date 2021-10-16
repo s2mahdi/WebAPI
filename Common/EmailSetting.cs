@@ -16,5 +16,8 @@
         public string UserName { get; set; }
         public string Password { get; set; }
         public string FromNumber { get; set; }
+        public int Secound { get; set; }
+        public int Minute { get; set; }
+        public int Day { get; set; }
     }
 }

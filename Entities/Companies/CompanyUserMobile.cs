@@ -13,6 +13,7 @@ namespace Entities
         public string CompanyName { get; set; }
         public string CompanyCode { get; set; }
         public DateTime ExpireDateAccess { get; set; }
+        public DateTime DateActiveByUser { get; set; }
         public bool IsActive { get; set; }
         public string Description { get; set; }
     }

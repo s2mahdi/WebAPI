@@ -63,6 +63,7 @@ namespace MyApi.Controllers.v1
         [HttpGet("VerifySMS")]
         public async Task<string> VerifySMS(string mobileNumber, CancellationToken cancellationToken)
         {
+
             var mobilePattern = @"^09[0|1|2|3][0-9]{8}$";
             var match = Regex.Match(mobileNumber, mobilePattern);
 
@@ -77,10 +78,11 @@ namespace MyApi.Controllers.v1
                     if (companyUserMobile.ExpireDateAccess >= DateTime.Now && companyUserMobile.IsActive != false)
                     {
                         var verificationCode = await SaveLoginEvent(mobileNumber, cancellationToken);
-                        var mobileCount = await mobileActivationRepository.Entities.Where(p => p.Mobile == mobileNumber && DateTime.Now < p.ExpireDate).ToListAsync();
-                        if(mobileCount.Count >= 5)
+                        //&& p.CreateDate > DateTime.Now.Minute - siteSettings.SmsSetting.Minute
+                        var mobileCount = await mobileActivationRepository.Entities.Where(p => p.Mobile == mobileNumber).ToListAsync();
+                        if (mobileCount.Count >= 5)
                         {
-                             throw new BadRequestException("تعداد درخواست بیش از حد مجاز می باشد");
+                            throw new BadRequestException("شما از حداکثر ارسال پیامک خود استفاده کرده اید");
                         }
                         //send sms --> Uncomment this section, after the SMS service has established and change the return type to 'ActionResult'
                         //var sendResult = await smsSender.SendAsync(mobileNumber.ToString(), verificationCode.ToString());
@@ -118,13 +120,16 @@ namespace MyApi.Controllers.v1
             var date = DateTime.Now;
 
             var loginEvent = await mobileActivationRepository.Entities
-                .Where(p => p.Mobile == mobileNumber && p.ActivationCode == code).FirstOrDefaultAsync(cancellationToken);
+                .Where(p=>p.Mobile == mobileNumber && p.ActivationCode == code).FirstOrDefaultAsync(cancellationToken);
 
 
             if (loginEvent == null)
             {
+                loginEvent.Status = (int)EnumStatus.VerificationStatus.NotCorrectCode;
+                mobileActivationRepository.Update(loginEvent);
                 return BadRequest();
             }
+
 
             //Check the ExpireDate is valid
             if (loginEvent.ExpireDate < date)
@@ -134,13 +139,7 @@ namespace MyApi.Controllers.v1
                 return new BadRequestResult();
             }
 
-            //check the verification code is correct or not
-            if (loginEvent.ActivationCode != code)
-            {
-                loginEvent.Status = (int)EnumStatus.VerificationStatus.NotCorrectCode;
-                mobileActivationRepository.Update(loginEvent);
-                return new BadRequestResult();
-            }
+           
 
             await CheckPhoneNumber(mobileNumber, cancellationToken);
 
@@ -166,19 +165,13 @@ namespace MyApi.Controllers.v1
         {
             int verificationCode = new Random().Next(10101, 99999);
 
-            var existMobileNumber = await mobileActivationRepository.Entities.Where(p => p.Mobile == mobileNumber && p.Status== 3).SingleOrDefaultAsync(cancellationToken);
-
-            if (existMobileNumber != null)
-            {
-                return new DuplicateWaitObjectException("Mobile", "این شماره موبایل در سیستم فعال می باشد").ToString();
-            }
             var mobilActivation = new MobileActivation
             {
                 ActivationCode = verificationCode.ToString(),
                 Mobile = mobileNumber,
                 Status = (byte)EnumStatus.VerificationStatus.SendSMS,
                 StatusDate = DateTime.Now,
-                CreateTime = DateTime.Now,
+                CreateDate = DateTime.Now,
                 ExpireDate = DateTime.Now.AddMinutes(5)
             };
 

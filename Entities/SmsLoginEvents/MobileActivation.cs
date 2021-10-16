@@ -12,7 +12,7 @@ namespace Entities
         public string ActivationCode { get; set; }
         public byte Status { get; set; }
         public DateTime StatusDate { get; set; }
-        public DateTime CreateTime { get; set; }
+        public DateTime CreateDate { get; set; }
         public DateTime ExpireDate { get; set; }
     }
 }
