@@ -78,11 +78,14 @@ namespace MyApi.Controllers.v1
                     if (companyUserMobile.ExpireDateAccess >= DateTime.Now && companyUserMobile.IsActive != false)
                     {
                         var verificationCode = await SaveLoginEvent(mobileNumber, cancellationToken);
-                        var timeVAlid = DateTime.Now.Minute - siteSettings.SmsSetting.Minute;
-                        var mobileCount = await mobileActivationRepository.Entities.Where(p => p.Mobile == mobileNumber).ToListAsync();
+
+                        var mobileCount = await mobileActivationRepository.Entities.Where(p => p.Mobile == mobileNumber && p.CreateDate.Minute - DateTime.Now.Minute <= siteSettings.SmsSetting.Minute).ToListAsync();
+
                         if (mobileCount.Count >= 5)
                         {
+                            //await emailSender.SendEmail(new EmailMessage("lotfi.engin@gmail.com", siteSettings.EmailSetting.Subject, verificationCode));
                             throw new BadRequestException("شما از حداکثر ارسال پیامک خود استفاده کرده اید");
+
                         }
                         //send sms --> Uncomment this section, after the SMS service has established and change the return type to 'ActionResult'
                         //var sendResult = await smsSender.SendAsync(mobileNumber.ToString(), verificationCode.ToString());
@@ -125,8 +128,8 @@ namespace MyApi.Controllers.v1
 
             if (loginEvent == null)
             {
-                loginEvent.Status = (int)EnumStatus.VerificationStatus.NotCorrectCode;
-                mobileActivationRepository.Update(loginEvent);
+                //loginEvent.Status = (int)EnumStatus.VerificationStatus.NotCorrectCode;
+                //mobileActivationRepository.Update(loginEvent);
                 return BadRequest();
             }
 
