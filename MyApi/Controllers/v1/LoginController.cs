@@ -78,12 +78,15 @@ namespace MyApi.Controllers.v1
                     if (companyUserMobile.ExpireDateAccess >= DateTime.Now && companyUserMobile.IsActive != false)
                     {
                         var verificationCode = await SaveLoginEvent(mobileNumber, cancellationToken);
+                        var startDate = DateTime.Now.AddMinutes(-siteSettings.SmsSetting.Minute) ;
+                        var EndDate = DateTime.Now ;
 
-                        var mobileCount = await mobileActivationRepository.Entities.Where(p => p.Mobile == mobileNumber && p.CreateDate.Minute - DateTime.Now.Minute <= siteSettings.SmsSetting.Minute).ToListAsync();
+                        var mobileCount = await mobileActivationRepository.Entities.Where(p => p.Mobile == mobileNumber && 
+                                                                                          p.CreateDate >= startDate  
+                                                                                          && p.CreateDate <= EndDate).ToListAsync();
 
                         if (mobileCount.Count >= 5)
                         {
-                            //await emailSender.SendEmail(new EmailMessage("lotfi.engin@gmail.com", siteSettings.EmailSetting.Subject, verificationCode));
                             throw new BadRequestException("شما از حداکثر ارسال پیامک خود استفاده کرده اید");
 
                         }
@@ -123,13 +126,13 @@ namespace MyApi.Controllers.v1
             var date = DateTime.Now;
 
             var loginEvent = await mobileActivationRepository.Entities
-                .Where(p => p.Mobile == mobileNumber && p.ActivationCode == code).FirstOrDefaultAsync(cancellationToken);
+                .OrderByDescending(p => p.Id).Take(1).FirstOrDefaultAsync(cancellationToken);
 
 
-            if (loginEvent == null)
+            if (loginEvent.Mobile != mobileNumber && loginEvent.ActivationCode != code )
             {
-                //loginEvent.Status = (int)EnumStatus.VerificationStatus.NotCorrectCode;
-                //mobileActivationRepository.Update(loginEvent);
+                loginEvent.Status = (int)EnumStatus.VerificationStatus.NotCorrectCode;
+                mobileActivationRepository.Update(loginEvent);
                 return BadRequest();
             }
 
