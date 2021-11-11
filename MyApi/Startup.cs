@@ -90,7 +90,7 @@ namespace MyApi
             app.UseAuthorization();
 
             //Use this config just in Develoment (not in Production)
-            //app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             app.UseEndpoints(config =>
             {

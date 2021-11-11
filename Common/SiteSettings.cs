@@ -7,6 +7,7 @@
         public IdentitySettings IdentitySettings { get; set; }
         public EmailSetting EmailSetting { get; set; }
         public SmsSetting SmsSetting { get; set; }
+        
 
     }
 
@@ -27,5 +28,12 @@
         public string Audience { get; set; }
         public int NotBeforeMinutes { get; set; }
         public int ExpirationMinutes { get; set; }
+    }
+
+    public class  TokenExpireDate
+    {
+        public int Month { get; set; }
+        public int Day { get; set; }
+        public int Minutes { get; set; }
     }
 }

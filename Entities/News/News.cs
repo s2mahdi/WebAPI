@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace Entities.Newses
 {
@@ -8,6 +9,7 @@ namespace Entities.Newses
         public string Title { get; set; }
         public string ImagePath { get; set; }
         public string Description { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
     public class NewsConfiguration : IEntityTypeConfiguration<News>
     {

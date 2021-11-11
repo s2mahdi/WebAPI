@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MyApi.Models;
 using Services;
@@ -30,6 +31,7 @@ namespace MyApi.Controllers.v1
         private readonly IEmailSender emailSender;
         private readonly ISmsSender smsSender;
         private readonly SiteSettings siteSettings;
+        private readonly TokenExpireDate tokenSettings;
         private readonly UserManager<User> userManager;
         private readonly IJwtService jwtService;
         private readonly IUserRepository userRepository;
@@ -39,6 +41,7 @@ namespace MyApi.Controllers.v1
         public LoginController(IRepository<SmsLoginEvent> repository,
                                IEmailSender emailSender, ISmsSender smsSender,
                                IOptionsSnapshot<SiteSettings> settings,
+                               IOptionsSnapshot<TokenExpireDate> tokenSettings,
                                UserManager<User> userManager,
                                IJwtService jwtService,
                                IUserRepository userRepository,
@@ -49,6 +52,7 @@ namespace MyApi.Controllers.v1
             this.emailSender = emailSender;
             this.smsSender = smsSender;
             this.siteSettings = settings.Value;
+            this.tokenSettings = tokenSettings.Value;
             this.userManager = userManager;
             this.jwtService = jwtService;
             this.userRepository = userRepository;
@@ -85,11 +89,11 @@ namespace MyApi.Controllers.v1
                                                                                           p.CreateDate >= startDate  
                                                                                           && p.CreateDate <= EndDate).ToListAsync();
 
-                        if (mobileCount.Count >= 5)
-                        {
-                            throw new BadRequestException("شما از حداکثر ارسال پیامک خود استفاده کرده اید");
+                        //if (mobileCount.Count >= 5)
+                        //{
+                        //    throw new BadRequestException("شما از حداکثر ارسال پیامک خود استفاده کرده اید");
 
-                        }
+                        //}
                         //send sms --> Uncomment this section, after the SMS service has established and change the return type to 'ActionResult'
                         //var sendResult = await smsSender.SendAsync(mobileNumber.ToString(), verificationCode.ToString());
 
@@ -175,7 +179,7 @@ namespace MyApi.Controllers.v1
                 Status = (byte)EnumStatus.VerificationStatus.SendSMS,
                 StatusDate = DateTime.Now,
                 CreateDate = DateTime.Now,
-                ExpireDate = DateTime.Now.AddMinutes(5)
+                ExpireDate = DateTime.Now.AddMonths(tokenSettings.Month)
             };
 
             await mobileActivationRepository.AddAsync(mobilActivation, cancellationToken);
