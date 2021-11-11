@@ -7,6 +7,7 @@
         public IdentitySettings IdentitySettings { get; set; }
         public EmailSetting EmailSetting { get; set; }
         public SmsSetting SmsSetting { get; set; }
+        public TokenExpireDate TokenExpireDate { get; set; }
         
 
     }
@@ -32,7 +33,7 @@
 
     public class  TokenExpireDate
     {
-        public int Month { get; set; }
+        public int Months { get; set; }
         public int Day { get; set; }
         public int Minutes { get; set; }
     }

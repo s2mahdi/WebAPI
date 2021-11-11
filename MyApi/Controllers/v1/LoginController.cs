@@ -31,7 +31,6 @@ namespace MyApi.Controllers.v1
         private readonly IEmailSender emailSender;
         private readonly ISmsSender smsSender;
         private readonly SiteSettings siteSettings;
-        private readonly TokenExpireDate tokenSettings;
         private readonly UserManager<User> userManager;
         private readonly IJwtService jwtService;
         private readonly IUserRepository userRepository;
@@ -41,7 +40,6 @@ namespace MyApi.Controllers.v1
         public LoginController(IRepository<SmsLoginEvent> repository,
                                IEmailSender emailSender, ISmsSender smsSender,
                                IOptionsSnapshot<SiteSettings> settings,
-                               IOptionsSnapshot<TokenExpireDate> tokenSettings,
                                UserManager<User> userManager,
                                IJwtService jwtService,
                                IUserRepository userRepository,
@@ -52,7 +50,6 @@ namespace MyApi.Controllers.v1
             this.emailSender = emailSender;
             this.smsSender = smsSender;
             this.siteSettings = settings.Value;
-            this.tokenSettings = tokenSettings.Value;
             this.userManager = userManager;
             this.jwtService = jwtService;
             this.userRepository = userRepository;
@@ -179,7 +176,7 @@ namespace MyApi.Controllers.v1
                 Status = (byte)EnumStatus.VerificationStatus.SendSMS,
                 StatusDate = DateTime.Now,
                 CreateDate = DateTime.Now,
-                ExpireDate = DateTime.Now.AddMonths(tokenSettings.Month)
+                ExpireDate = DateTime.Now.AddMonths(siteSettings.TokenExpireDate.Months)
             };
 
             await mobileActivationRepository.AddAsync(mobilActivation, cancellationToken);
