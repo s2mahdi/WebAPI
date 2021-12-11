@@ -1,6 +1,6 @@
 ﻿using Common;
 using Data.Contracts.Statuses;
-using Entities.Statuses;
+using Entities;
 
 namespace Data.Repositories.Statuses
 {

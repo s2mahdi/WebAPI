@@ -6,9 +6,9 @@ using WebFramework.Api;
 
 namespace MyApi.Controllers.v1
 {
-    public class SectionController : CrudController<SectionDto, Section>
+    public class GroupController : CrudController<GroupDto, Group>
     {
-        public SectionController(IRepository<Section> repository, IMapper mapper)
+        public GroupController(IRepository<Group> repository, IMapper mapper)
             : base(repository, mapper)
         {
         }

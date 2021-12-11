@@ -1,6 +1,6 @@
 ﻿using Common;
 using Data.Contracts.Tickets;
-using Entities.Statuses;
+using Entities;
 
 namespace Data.Repositories.Tickets
 {

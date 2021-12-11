@@ -1,5 +1,5 @@
 ﻿using Data.Repositories;
-using Entities.Contacts;
+using Entities;
 
 namespace Data.Contracts.Contacts
 {

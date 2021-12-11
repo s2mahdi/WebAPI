@@ -1,6 +1,6 @@
 ﻿using Common;
 using Data.Contracts.Contacts;
-using Entities.Contacts;
+using Entities;
 
 namespace Data.Repositories.ContactUss
 {

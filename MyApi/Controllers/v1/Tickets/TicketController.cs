@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Data.Repositories;
-using Entities.Statuses;
+using Entities;
 using MyApi.Models;
 using WebFramework.Api;
 

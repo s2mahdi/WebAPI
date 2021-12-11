@@ -13,7 +13,6 @@ namespace Entities
     {
         public string AttachmentTitle { get; set; }
         public string AttchmentType { get; set; }
-        public DateTime UploadDateTime { get; set; }
         public byte[] AttachmentFile { get; set; }
     }
 
@@ -22,7 +21,7 @@ namespace Entities
         public void Configure(EntityTypeBuilder<Attachment> builder)
         {
             builder.Property(p => p.AttachmentTitle).HasMaxLength(100);
-            builder.Property(p => p.AttchmentType).HasMaxLength(5);
+            builder.Property(p => p.AttchmentType).HasMaxLength(20);
         }
     }
 }

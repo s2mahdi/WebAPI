@@ -1,6 +1,4 @@
-﻿using Entities.Statuses;
-using Entities.Statuses;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Entities.SamplingOperations

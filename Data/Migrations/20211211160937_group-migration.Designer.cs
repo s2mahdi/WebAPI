@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211211160937_group-migration")]
+    partial class groupmigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -577,7 +579,7 @@ namespace Data.Migrations
                     b.ToTable("CompanyUserMobiles");
                 });
 
-            modelBuilder.Entity("Entities.ContactUs", b =>
+            modelBuilder.Entity("Entities.Contacts.ContactUs", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -796,7 +798,7 @@ namespace Data.Migrations
                     b.ToTable("CourseRequestStatusHistories");
                 });
 
-            modelBuilder.Entity("Entities.Group", b =>
+            modelBuilder.Entity("Entities.Group.Group", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1204,38 +1206,6 @@ namespace Data.Migrations
                     b.ToTable("SamplingOperations");
                 });
 
-            modelBuilder.Entity("Entities.Section", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("ModifiedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SectionName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sections");
-                });
-
             modelBuilder.Entity("Entities.SmsLoginEvent", b =>
                 {
                     b.Property<int>("Id")
@@ -1281,7 +1251,39 @@ namespace Data.Migrations
                     b.ToTable("SmsLoginEvents");
                 });
 
-            modelBuilder.Entity("Entities.Status", b =>
+            modelBuilder.Entity("Entities.Statuses.Section", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ModifiedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SectionName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sections");
+                });
+
+            modelBuilder.Entity("Entities.Statuses.Status", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1313,7 +1315,7 @@ namespace Data.Migrations
                     b.ToTable("Statuses");
                 });
 
-            modelBuilder.Entity("Entities.Ticket", b =>
+            modelBuilder.Entity("Entities.Statuses.Ticket", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1344,6 +1346,9 @@ namespace Data.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
+                    b.Property<int>("GroupTitle")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ModifiedByUserId")
                         .HasColumnType("int");
 
@@ -1362,8 +1367,6 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GroupId");
 
                     b.HasIndex("SectionId");
 
@@ -1632,9 +1635,9 @@ namespace Data.Migrations
                     b.Navigation("ParentCategory");
                 });
 
-            modelBuilder.Entity("Entities.ContactUs", b =>
+            modelBuilder.Entity("Entities.Contacts.ContactUs", b =>
                 {
-                    b.OwnsOne("Entities.Location", "Location", b1 =>
+                    b.OwnsOne("Entities.Contacts.Location", "Location", b1 =>
                         {
                             b1.Property<int>("ContactUsId")
                                 .ValueGeneratedOnAdd()
@@ -1725,7 +1728,7 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Entities.Status", "Status")
+                    b.HasOne("Entities.Statuses.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1750,7 +1753,7 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Entities.Status", "Status")
+                    b.HasOne("Entities.Statuses.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1763,27 +1766,19 @@ namespace Data.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("Entities.Ticket", b =>
+            modelBuilder.Entity("Entities.Statuses.Ticket", b =>
                 {
-                    b.HasOne("Entities.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Section", "Section")
+                    b.HasOne("Entities.Statuses.Section", "Section")
                         .WithMany()
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Entities.Status", "Status")
+                    b.HasOne("Entities.Statuses.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("Group");
 
                     b.Navigation("Section");
 

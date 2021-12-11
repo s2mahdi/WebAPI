@@ -1,4 +1,5 @@
-﻿using Entities.Statuses;
+﻿using Entities;
+
 using System;
 using WebFramework.Api;
 
@@ -13,7 +14,7 @@ namespace MyApi.Models
         public int AnswerUser { get; set; }
         public DateTime AnswerDate { get; set; }
         public int SectionId { get; set; }
-        public int GroupTitle { get; set; }
+        public int GroupId { get; set; }
         public int StatusId { get; set; }
     }
 }

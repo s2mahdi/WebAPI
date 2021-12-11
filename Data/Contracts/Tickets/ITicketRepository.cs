@@ -1,5 +1,5 @@
 ﻿using Data.Repositories;
-using Entities.Statuses;
+using Entities;
 
 namespace Data.Contracts.Tickets
 {

@@ -33,8 +33,9 @@ namespace MyApi.Controllers.v1
                 {
                     AttachmentFile = file[0].AttachmentFile,
                     AttachmentTitle = file[0].AttachmentTitle,
-                    AttchmentType = file[0].AttchmentType
-                };
+                    AttchmentType = file[0].AttchmentType,
+
+    };
                 await Repository.AddAsync(newAttachent, cancellationToken);
             }
             catch (Exception ex)

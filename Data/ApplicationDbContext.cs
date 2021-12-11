@@ -5,11 +5,9 @@ using Entities;
 using Entities.Abouts;
 using Entities.Assets;
 using Entities.Companies;
-using Entities.Contacts;
 using Entities.Courses;
 using Entities.Newses;
 using Entities.SamplingOperations;
-using Entities.Statuses;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -52,6 +50,8 @@ namespace Data
         public DbSet<User> Users { get; set; }
         public DbSet<CompanyUserMobile> CompanyUserMobiles { get; set; }
         public DbSet<MobileActivation> MobileActivations { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<Group> Groups { get; set; }
         #endregion
         public ApplicationDbContext(DbContextOptions options)
             : base(options)

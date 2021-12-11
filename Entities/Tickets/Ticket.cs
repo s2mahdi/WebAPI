@@ -2,7 +2,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 
-namespace Entities.Statuses
+
+namespace Entities
 {
     public class Ticket : BaseEntity
     {
@@ -12,11 +13,12 @@ namespace Entities.Statuses
         public string AnswerBody { get; set; }
         public DateTime AnswerDate { get; set; }
         public int AnswerUser { get; set; }
-        public int GroupTitle { get; set; }
         public int StatusId { get; set; }
         public Status Status { get; set; }
         public int SectionId { get; set; }
         public Section Section { get; set; }
+        public int GroupId { get; set; }
+        public Group Group { get; set; }
     }
     public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
     {

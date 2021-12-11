@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 
-namespace Entities.Contacts
+namespace Entities
 {
     public class ContactUs : BaseEntity
     {

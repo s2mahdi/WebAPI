@@ -1,6 +1,4 @@
-﻿using Entities.Statuses;
-
-namespace Entities.SamplingOperations
+﻿namespace Entities.SamplingOperations
 {
     public class SamplingExpertStatusHistory : BaseEntity
     {
