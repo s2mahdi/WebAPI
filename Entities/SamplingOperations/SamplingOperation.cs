@@ -12,7 +12,7 @@ namespace Entities.SamplingOperations
         public string LetterNum { get; set; }
         public string LetterPath { get; set; }
         public int InvoiceId { get; set; }
-        public DateTime InvoiceDate { get; set; }
+        public string InvoiceDate { get; set; }
         public int InvoicePrice { get; set; }
         public string InvoicePath { get; set; }
         public string IsActive { get; set; }

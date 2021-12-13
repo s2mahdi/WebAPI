@@ -31,6 +31,8 @@ namespace Entities
                 .OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(c => c.Status).WithMany()
                 .OnDelete(DeleteBehavior.NoAction);
+            builder.Property(c => c.StatusName)
+                .HasMaxLength(50);
         }
     }
 }
