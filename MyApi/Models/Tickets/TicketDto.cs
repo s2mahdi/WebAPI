@@ -16,5 +16,6 @@ namespace MyApi.Models
         public int SectionId { get; set; }
         public int GroupId { get; set; }
         public int StatusId { get; set; }
+        public string StatusName { get; set; }
     }
 }

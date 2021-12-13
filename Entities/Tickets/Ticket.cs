@@ -14,7 +14,7 @@ namespace Entities
         public DateTime AnswerDate { get; set; }
         public int AnswerUser { get; set; }
         public int StatusId { get; set; }
-        public string StatusTitle { get; set; }
+        public string StatusName { get; set; }
         public Status Status { get; set; }
         public int SectionId { get; set; }
         public Section Section { get; set; }

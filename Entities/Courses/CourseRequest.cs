@@ -6,6 +6,7 @@ namespace Entities.Courses
 {
     public class CourseRequest : BaseEntity
     {
+        public string CourseTitle { get; set; }
         public int CourseId { get; set; }
         public Course Course { get; set; }
         public string RequestDate { get; set; }

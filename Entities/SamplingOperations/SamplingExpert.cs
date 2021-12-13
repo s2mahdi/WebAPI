@@ -7,6 +7,9 @@ namespace Entities.SamplingOperations
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string StatusName { get; set; }
+        public int StatusId { get; set; }
+        public Status Status { get; set; }
     }
     public class SamplingExpertConfiguration : IEntityTypeConfiguration<SamplingExpert>
     {

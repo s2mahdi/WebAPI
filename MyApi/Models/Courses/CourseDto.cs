@@ -11,6 +11,7 @@ namespace MyApi.Models
         public string CourseTopics { get; set; }
         public string Teacher { get; set; }
         public bool IsActive { get; set; }
+        public int InvoiceId { get; set; }
         public DateTime HoldingDate { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace Entities.SamplingOperations
 {
@@ -11,7 +12,7 @@ namespace Entities.SamplingOperations
         public string LetterNum { get; set; }
         public string LetterPath { get; set; }
         public int InvoiceId { get; set; }
-        public string InvoiceDate { get; set; }
+        public DateTime InvoiceDate { get; set; }
         public int InvoicePrice { get; set; }
         public string InvoicePath { get; set; }
         public string IsActive { get; set; }
@@ -35,8 +36,6 @@ namespace Entities.SamplingOperations
                 .HasMaxLength(50).IsRequired();
             builder.Property(c => c.LetterPath)
                 .HasMaxLength(100).IsRequired();
-            //builder.Property(c => c.InvoiceId)
-            //    .HasMaxLength(20).IsRequired();
             builder.Property(c => c.InvoicePath)
                 .HasMaxLength(100).IsRequired();
         }

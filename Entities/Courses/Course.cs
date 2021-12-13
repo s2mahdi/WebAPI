@@ -12,6 +12,7 @@ namespace Entities.Courses
         public string CourseTopics { get; set; }
         public string Teacher { get; set; }
         public bool IsActive { get; set; }
+        public int InvoiceId { get; set; }
         public DateTime HoldingDate { get; set; }
         public ICollection<CourseRequest> CourseRequests { get; set; }
     }

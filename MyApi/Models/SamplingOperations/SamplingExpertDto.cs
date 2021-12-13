@@ -1,4 +1,5 @@
 ﻿using Entities.SamplingOperations;
+using System;
 using WebFramework.Api;
 
 namespace MyApi.Models
@@ -8,5 +9,8 @@ namespace MyApi.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string StatusName { get; set; }
+        public DateTime InvoiceDate { get; set; }
+        public int StatusId { get; set; }
     }
 }
