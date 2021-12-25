@@ -14,7 +14,9 @@ namespace MyApi.Models
         public int AnswerUser { get; set; }
         public DateTime AnswerDate { get; set; }
         public int SectionId { get; set; }
+        public string SectionName { get; set; }
         public int GroupId { get; set; }
+        public string GroupName { get; set; }
         public int StatusId { get; set; }
         public string StatusName { get; set; }
     }

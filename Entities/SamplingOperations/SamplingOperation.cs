@@ -16,11 +16,14 @@ namespace Entities.SamplingOperations
         public int InvoicePrice { get; set; }
         public string InvoicePath { get; set; }
         public string IsActive { get; set; }
+        public string CreatedAt { get; set; }
         public int SampleTypeId { get; set; }
+        public string SampleTypeName { get; set; }
         public SampleType SampleType { get; set; }
         public int DeviceTypeId { get; set; }
         public DeviceType DeviceType { get; set; }
         public int StatusId { get; set; }
+        public string StatusName { get; set; }
         public Status Status { get; set; }
     }
 

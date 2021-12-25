@@ -17,8 +17,10 @@ namespace Entities
         public string StatusName { get; set; }
         public Status Status { get; set; }
         public int SectionId { get; set; }
+        public string SectionName { get; set; }
         public Section Section { get; set; }
         public int GroupId { get; set; }
+        public string GroupName { get; set; }
         public Group Group { get; set; }
     }
     public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
