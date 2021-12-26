@@ -52,6 +52,7 @@ namespace Data
         public DbSet<MobileActivation> MobileActivations { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Group> Groups { get; set; }
+        public DbSet<Invoice>  Invoices { get; set; }
         #endregion
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
