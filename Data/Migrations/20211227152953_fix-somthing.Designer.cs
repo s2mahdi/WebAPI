@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211227152953_fix-somthing")]
+    partial class fixsomthing
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -843,15 +845,8 @@ namespace Data.Migrations
                     b.Property<DateTime?>("CreatedDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("InvoiceDate")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<int>("InvoiceNo")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("InvoicePrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("ModifiedByUserId")
                         .HasColumnType("int");
@@ -859,28 +854,15 @@ namespace Data.Migrations
                     b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RequestLetterDate")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("invoiceDate")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RequestLetterNo")
+                    b.Property<int>("invoicePrice")
                         .HasColumnType("int");
-
-                    b.Property<int>("StatusId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StatusName")
-                        .HasMaxLength(50)
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("VAT")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AttachmentId");
-
-                    b.HasIndex("StatusId");
 
                     b.ToTable("Invoices");
                 });
@@ -1793,15 +1775,7 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Entities.Status", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Attachment");
-
-                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Entities.Post", b =>
