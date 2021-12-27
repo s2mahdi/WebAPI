@@ -29,9 +29,9 @@ namespace Entities.Courses
         public void Configure(EntityTypeBuilder<CourseRequest> builder)
         {
             builder.Property(c => c.InvoicePath)
-                .HasMaxLength(100).IsRequired();
+                .HasMaxLength(100);
             builder.Property(c => c.InvoiceId)
-                .HasMaxLength(20).IsRequired();
+                .HasMaxLength(20);
             builder.Property(c => c.RequestDate)
                 .HasMaxLength(50).IsRequired();
         }

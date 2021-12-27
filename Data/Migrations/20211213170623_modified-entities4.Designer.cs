@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211213170623_modified-entities4")]
+    partial class modifiedentities4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -691,11 +693,10 @@ namespace Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("InvoiceDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("InvoiceDate")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("InvoiceId")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -827,44 +828,6 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("Entities.Invoice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AttachmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("InvoiceNo")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ModifiedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("invoiceDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("invoicePrice")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AttachmentId");
-
-                    b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("Entities.MobileActivation", b =>
@@ -1118,6 +1081,9 @@ namespace Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("InvoiceDate")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -1129,11 +1095,12 @@ namespace Data.Migrations
                     b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("StatusId")
+                    b.Property<int?>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("StatusName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -1183,9 +1150,6 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CreatedAt")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("CreatedByUserId")
                         .HasColumnType("int");
 
@@ -1198,7 +1162,8 @@ namespace Data.Migrations
                     b.Property<string>("InvoiceDate")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("InvoiceId")
+                    b.Property<int?>("InvoiceId")
+                        .HasMaxLength(20)
                         .HasColumnType("int");
 
                     b.Property<string>("InvoicePath")
@@ -1234,19 +1199,13 @@ namespace Data.Migrations
                     b.Property<int>("SampleTypeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SampleTypeName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SiteAddress")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("StatusId")
+                    b.Property<int?>("StatusId")
                         .HasColumnType("int");
-
-                    b.Property<string>("StatusName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tell")
                         .IsRequired()
@@ -1404,9 +1363,6 @@ namespace Data.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
-                    b.Property<string>("GroupName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("ModifiedByUserId")
                         .HasColumnType("int");
 
@@ -1416,10 +1372,7 @@ namespace Data.Migrations
                     b.Property<int>("SectionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SectionName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StatusId")
+                    b.Property<int?>("StatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("StatusName")
@@ -1768,17 +1721,6 @@ namespace Data.Migrations
                     b.Navigation("CourseRequestStatus");
                 });
 
-            modelBuilder.Entity("Entities.Invoice", b =>
-                {
-                    b.HasOne("Entities.Attachment", "Attachment")
-                        .WithMany()
-                        .HasForeignKey("AttachmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Attachment");
-                });
-
             modelBuilder.Entity("Entities.Post", b =>
                 {
                     b.HasOne("Entities.User", "Author")
@@ -1802,9 +1744,7 @@ namespace Data.Migrations
                 {
                     b.HasOne("Entities.Status", "Status")
                         .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("StatusId");
 
                     b.Navigation("Status");
                 });
@@ -1844,9 +1784,7 @@ namespace Data.Migrations
 
                     b.HasOne("Entities.Status", "Status")
                         .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("StatusId");
 
                     b.Navigation("DeviceType");
 
@@ -1872,8 +1810,7 @@ namespace Data.Migrations
                     b.HasOne("Entities.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Group");
 

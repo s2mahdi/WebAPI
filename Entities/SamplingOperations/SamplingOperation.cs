@@ -40,7 +40,7 @@ namespace Entities.SamplingOperations
             builder.Property(c => c.LetterPath)
                 .HasMaxLength(100).IsRequired();
             builder.Property(c => c.InvoicePath)
-                .HasMaxLength(100).IsRequired();
+                .HasMaxLength(100);
         }
     }
 
