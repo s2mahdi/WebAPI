@@ -53,6 +53,7 @@ namespace Data
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Invoice>  Invoices { get; set; }
+        public DbSet<PaymentReceipt> PaymentReceipts { get; set; }
         #endregion
         public ApplicationDbContext(DbContextOptions options)
             : base(options)

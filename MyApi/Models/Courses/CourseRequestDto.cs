@@ -14,7 +14,7 @@ namespace MyApi.Models
         public bool IsDeleted { get; set; }
         public DateTime DeletedDate { get; set; }
         public string InvoiceId { get; set; }
-        public DateTime InvoiceDate { get; set; }
+        public string InvoiceDate { get; set; }
         public int InvoicePrice { get; set; }
         public string InvoicePath { get; set; }
         public int CourseRequestStatusId { get; set; }

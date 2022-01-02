@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
 
 namespace Entities.SamplingOperations
 {
@@ -9,7 +10,7 @@ namespace Entities.SamplingOperations
         public string LastName { get; set; }
         public string StatusName { get; set; }
         public int StatusId { get; set; }
-        public Status Status { get; set; }
+        public ICollection<Status> Status { get; set; }
     }
     public class SamplingExpertConfiguration : IEntityTypeConfiguration<SamplingExpert>
     {

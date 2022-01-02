@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
 
 namespace Entities
 {
@@ -13,9 +14,9 @@ namespace Entities
         public int StatusName { get; set; }
         public decimal VAT { get; set; }
         public int AttachmentId { get; set; }
-        public Attachment Attachment { get; set; }
+        public ICollection<Attachment> Attachment { get; set; }
         public int StatusId { get; set; }
-        public Status Status { get; set; }
+        public ICollection<Status> Status { get; set; }
     }
     public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
     {

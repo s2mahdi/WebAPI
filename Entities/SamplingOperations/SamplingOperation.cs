@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
+using System.Collections.Generic;
 
 namespace Entities.SamplingOperations
 {
@@ -19,12 +20,12 @@ namespace Entities.SamplingOperations
         public string CreatedAt { get; set; }
         public int SampleTypeId { get; set; }
         public string SampleTypeName { get; set; }
-        public SampleType SampleType { get; set; }
+        public ICollection<SampleType> SampleType { get; set; }
         public int DeviceTypeId { get; set; }
         public DeviceType DeviceType { get; set; }
         public int StatusId { get; set; }
         public string StatusName { get; set; }
-        public Status Status { get; set; }
+        public ICollection<Status> Status { get; set; }
     }
 
     public class SamplingOperationConfiguration : IEntityTypeConfiguration<SamplingOperation>
