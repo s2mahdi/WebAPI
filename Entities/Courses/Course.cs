@@ -24,9 +24,7 @@ namespace Entities.Courses
                 .HasMaxLength(100).IsRequired();
             builder.Property(c => c.Teacher)
                 .HasMaxLength(100).IsRequired();
-            builder.HasMany(c => c.CourseRequests)
-                .WithOne(c => c.Course)
-                .OnDelete(DeleteBehavior.NoAction);
+           
         }
     }
 }

@@ -24,6 +24,7 @@ namespace Entities.Courses
         public ICollection<CourseRequestStatus> CourseRequestStatus { get; set; }
         public DateTime StartedDateTime { get; set; }
         public string Description { get; set; }
+        public ICollection<Status> Statuses { get; set; }
     }
     public class CourseRequestConfiguration : IEntityTypeConfiguration<CourseRequest>
     {

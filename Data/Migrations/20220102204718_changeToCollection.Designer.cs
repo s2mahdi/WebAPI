@@ -4,14 +4,16 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220102204718_changeToCollection")]
+    partial class changeToCollection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -427,14 +429,9 @@ namespace Data.Migrations
                     b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("PaymentReceiptId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("InvoiceId");
-
-                    b.HasIndex("PaymentReceiptId");
 
                     b.ToTable("Attachments");
                 });
@@ -1436,9 +1433,6 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CourseRequestId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("CreatedByUserId")
                         .HasColumnType("int");
 
@@ -1457,42 +1451,24 @@ namespace Data.Migrations
                     b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ParentID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PaymentReceiptId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("SamplingExpertId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SamplingOperationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("StatusColorCode")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("StatusName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("TicketId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseRequestId");
-
                     b.HasIndex("InvoiceId");
-
-                    b.HasIndex("PaymentReceiptId");
 
                     b.HasIndex("SamplingExpertId");
 
                     b.HasIndex("SamplingOperationId");
-
-                    b.HasIndex("TicketId");
 
                     b.ToTable("Statuses");
                 });
@@ -1560,6 +1536,8 @@ namespace Data.Migrations
                     b.HasIndex("GroupId");
 
                     b.HasIndex("SectionId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Tickets");
                 });
@@ -1835,10 +1813,6 @@ namespace Data.Migrations
                     b.HasOne("Entities.Invoice", null)
                         .WithMany("Attachment")
                         .HasForeignKey("InvoiceId");
-
-                    b.HasOne("Entities.PaymentReceipt", null)
-                        .WithMany("Attachment")
-                        .HasForeignKey("PaymentReceiptId");
                 });
 
             modelBuilder.Entity("Entities.Category", b =>
@@ -1953,17 +1927,9 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Entities.Status", b =>
                 {
-                    b.HasOne("Entities.Courses.CourseRequest", null)
-                        .WithMany("Statuses")
-                        .HasForeignKey("CourseRequestId");
-
                     b.HasOne("Entities.Invoice", null)
                         .WithMany("Status")
                         .HasForeignKey("InvoiceId");
-
-                    b.HasOne("Entities.PaymentReceipt", null)
-                        .WithMany("Status")
-                        .HasForeignKey("PaymentReceiptId");
 
                     b.HasOne("Entities.SamplingOperations.SamplingExpert", null)
                         .WithMany("Status")
@@ -1972,10 +1938,6 @@ namespace Data.Migrations
                     b.HasOne("Entities.SamplingOperations.SamplingOperation", null)
                         .WithMany("Status")
                         .HasForeignKey("SamplingOperationId");
-
-                    b.HasOne("Entities.Ticket", null)
-                        .WithMany("Status")
-                        .HasForeignKey("TicketId");
                 });
 
             modelBuilder.Entity("Entities.Ticket", b =>
@@ -1992,9 +1954,17 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Group");
 
                     b.Navigation("Section");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Entities.User", b =>
@@ -2078,8 +2048,6 @@ namespace Data.Migrations
             modelBuilder.Entity("Entities.Courses.CourseRequest", b =>
                 {
                     b.Navigation("CourseRequestStatus");
-
-                    b.Navigation("Statuses");
                 });
 
             modelBuilder.Entity("Entities.Courses.CourseRequestStatusHistory", b =>
@@ -2090,13 +2058,6 @@ namespace Data.Migrations
                 });
 
             modelBuilder.Entity("Entities.Invoice", b =>
-                {
-                    b.Navigation("Attachment");
-
-                    b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("Entities.PaymentReceipt", b =>
                 {
                     b.Navigation("Attachment");
 
@@ -2117,11 +2078,6 @@ namespace Data.Migrations
                 {
                     b.Navigation("SampleType");
 
-                    b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("Entities.Ticket", b =>
-                {
                     b.Navigation("Status");
                 });
 

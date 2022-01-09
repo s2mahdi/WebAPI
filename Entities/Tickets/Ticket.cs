@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-
+using System.Collections.Generic;
 
 namespace Entities
 {
@@ -15,7 +15,7 @@ namespace Entities
         public int AnswerUser { get; set; }
         public int StatusId { get; set; }
         public string StatusName { get; set; }
-        public Status Status { get; set; }
+        public ICollection<Status> Status { get; set; }
         public int SectionId { get; set; }
         public string SectionName { get; set; }
         public Section Section { get; set; }
@@ -30,8 +30,6 @@ namespace Entities
             builder.Property(c => c.Title)
                 .HasMaxLength(50).IsRequired();
             builder.HasOne(c => c.Section).WithMany()
-                .OnDelete(DeleteBehavior.NoAction);
-            builder.HasOne(c => c.Status).WithMany()
                 .OnDelete(DeleteBehavior.NoAction);
             builder.Property(c => c.StatusName)
                 .HasMaxLength(50);

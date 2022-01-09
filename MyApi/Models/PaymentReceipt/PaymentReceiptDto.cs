@@ -10,5 +10,7 @@ namespace MyApi.Models
         public string BankName { get; set; }
         public int PaymentReceiptNo { get; set; }
         public string PaymentReceiptStatus { get; set; }
+        public string StatusName { get; set; }
+        public string AttachmentId { get; set; }
     }
 }

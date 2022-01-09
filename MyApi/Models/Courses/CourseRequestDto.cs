@@ -7,6 +7,7 @@ namespace MyApi.Models
     public class CourseRequestDto : BaseDto<CourseRequestDto, CourseRequest>
     {
         public int CourseId { get; set; }
+        public string CourseTitle { get; set; }
         public string RequestDate { get; set; }
         public int AvalabelPerson { get; set; }
         public string LocationDesc { get; set; }
@@ -20,5 +21,6 @@ namespace MyApi.Models
         public int CourseRequestStatusId { get; set; }
         public DateTime StartedDateTime { get; set; }
         public string Description { get; set; }
+        public string StatusName { get; set; }
     }
 }

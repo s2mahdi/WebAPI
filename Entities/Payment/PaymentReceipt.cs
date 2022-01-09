@@ -15,6 +15,8 @@ namespace Entities
         public string BankName { get; set; }
         public int PaymentReceiptNo { get; set; }
         public string PaymentReceiptStatus { get; set; }
+        public ICollection<Status> Status { get; set; }
+        public ICollection<Attachment> Attachment { get; set; }
     }
     public class PaymentReceiptConfiguration : IEntityTypeConfiguration<PaymentReceipt>
     {
